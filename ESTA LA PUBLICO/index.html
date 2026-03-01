@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="CriptoLive - Plataforma moderna de trading de criptomonedas en tiempo real. Compra, vende y monitorea tus inversiones con datos actualizados al momento.">
+    <meta name="keywords" content="criptomonedas, bitcoin, ethereum, trading, exchange, portfolio, crypto">
+    <meta name="author" content="CriptoLive">
+    <title>CriptoLive - Tu Plataforma de Criptomonedas en Tiempo Real</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css?v=20">
+    <link rel="stylesheet" href="exchange-portfolio-enhancements.css?v=20">
+    <link rel="stylesheet" href="realtime-updates.css?v=20">
+</head>
+
+<body>
+    <!-- App Layout -->
+    <div id="crypto-app-container" class="app-layout hidden">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">₿</div>
+                <h1 class="logo-text">CriptoLive</h1>
+            </div>
+
+            <nav id="sidebar-nav" class="sidebar-nav">
+                <button id="nav-dashboard" class="nav-btn active" data-section="dashboard">
+                    <span class="nav-icon">📊</span>
+                    <span>Dashboard</span>
+                </button>
+                <button id="nav-exchange" class="nav-btn" data-section="exchange">
+                    <span class="nav-icon">💱</span>
+                    <span>Exchange</span>
+                </button>
+                <button id="nav-portfolio" class="nav-btn" data-section="portfolio">
+                    <span class="nav-icon">💼</span>
+                    <span>Portfolio</span>
+                </button>
+                <button id="nav-simulator" class="nav-btn" data-section="simulator">
+                    <span class="nav-icon">🎯</span>
+                    <span>Simulador</span>
+                </button>
+                <button id="nav-news" class="nav-btn hidden" data-section="news">
+                    <span class="nav-icon">📰</span>
+                    <span>Noticias</span>
+                </button>
+                <button id="crypto-back-to-mode" class="nav-btn">
+                    <span class="nav-icon">⬅️</span>
+                    <span>Cambiar Modo</span>
+                </button>
+                <button id="nav-admin" class="nav-btn hidden" data-section="admin"
+                    style="margin-top: auto; border-top: 1px solid rgba(255,255,255,0.05);">
+                    <span class="nav-icon">👑</span>
+                    <span style="color: var(--warning);">Admin</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="market-status">
+                    <span class="status-indicator pulse"></span>
+                    <span class="status-text">Mercado Activo</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="app-main">
+            <!-- Header -->
+            <header id="main-header" class="header">
+                <div class="container">
+                    <div class="header-content">
+                        <div class="balance-display">
+                            <span class="balance-label">Balance:</span>
+                            <span id="header-balance" class="balance-value">$10,000.00</span>
+                        </div>
+
+                        <div class="auth-section">
+                            <div id="g_id_onload" data-client_id="YOUR_GOOGLE_CLIENT_ID" data-context="signin"
+                                data-ux_mode="popup" data-callback="handleGoogleSignIn" data-auto_prompt="false">
+                            </div>
+
+                            <div id="user-profile" class="user-profile hidden">
+                                <img id="user-avatar" class="user-avatar" src="" alt="User">
+                                <span id="user-name" class="user-name"></span>
+                                <button id="logout-btn" class="logout-btn">Salir</button>
+                            </div>
+
+                            <button id="login-btn" class="btn-primary">
+                                <span>🔐</span>
+                                Iniciar Sesión
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Hero Section -->
+            <section id="hero-section" class="hero-section">
+                <div class="hero-background">
+                    <div class="hero-gradient"></div>
+                    <div class="hero-particles">
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                        <div class="particle"></div>
+                    </div>
+                </div>
+
+                <div class="container hero-container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">
+                            El Futuro de las
+                            <span class="hero-highlight">Criptomonedas</span>
+                            Está Aquí
+                        </h1>
+                        <p class="hero-subtitle">
+                            Compra, vende y monitorea tus inversiones con datos en tiempo real.
+                            La plataforma más moderna para traders inteligentes.
+                        </p>
+
+                        <div class="hero-cta">
+                            <button id="hero-start-btn" class="btn-hero-primary">
+                                <span class="btn-icon">🚀</span>
+                                Comenzar a Invertir
+                            </button>
+                            <button id="hero-learn-btn" class="btn-hero-secondary">
+                                <span class="btn-icon">📊</span>
+                                Ver Dashboard
+                            </button>
+                        </div>
+
+                        <!-- Live Ticker -->
+                        <div class="hero-ticker">
+                            <div class="ticker-label">EN VIVO:</div>
+                            <div id="hero-ticker-content" class="ticker-content">
+                                <div class="ticker-item">
+                                    <span class="ticker-name">BTC</span>
+                                    <span class="ticker-price">$0</span>
+                                    <span class="ticker-change positive">+0%</span>
+                                </div>
+                                <div class="ticker-item">
+                                    <span class="ticker-name">ETH</span>
+                                    <span class="ticker-price">$0</span>
+                                    <span class="ticker-change positive">+0%</span>
+                                </div>
+                                <div class="ticker-item">
+                                    <span class="ticker-name">SOL</span>
+                                    <span class="ticker-price">$0</span>
+                                    <span class="ticker-change positive">+0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-visual">
+                        <div class="hero-card floating">
+                            <div class="hero-card-icon">₿</div>
+                            <div class="hero-card-title">Trading Seguro</div>
+                            <div class="hero-card-desc">Simulador sin riesgos</div>
+                        </div>
+                        <div class="hero-card floating delay-1">
+                            <div class="hero-card-icon">📈</div>
+                            <div class="hero-card-title">Tiempo Real</div>
+                            <div class="hero-card-desc">Datos actualizados</div>
+                        </div>
+                        <div class="hero-card floating delay-2">
+                            <div class="hero-card-icon">💼</div>
+                            <div class="hero-card-title">Portfolio</div>
+                            <div class="hero-card-desc">Gestión completa</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Content -->
+            <main id="main-content" class="main-content">
+                <div class="container">
+                    <!-- Dashboard Section -->
+                    <section id="dashboard-section" class="section active">
+                        <div class="section-header">
+                            <h2 class="section-title">Dashboard de Mercado</h2>
+                            <div class="market-status">
+                                <span class="status-indicator pulse"></span>
+                                <span class="status-text">Mercado Activo</span>
+                            </div>
+                        </div>
+
+                        <!-- Market Stats -->
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">📈</div>
+                                <div class="stat-info">
+                                    <p class="stat-label">Cap. de Mercado Total</p>
+                                    <p id="total-market-cap" class="stat-value">$0</p>
+                                    <p id="market-cap-change" class="stat-change">+0%</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">💰</div>
+                                <div class="stat-info">
+                                    <p class="stat-label">Volumen 24h</p>
+                                    <p id="total-volume" class="stat-value">$0</p>
+                                    <p id="volume-change" class="stat-change">+0%</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">₿</div>
+                                <div class="stat-info">
+                                    <p class="stat-label">Dominancia BTC</p>
+                                    <p id="btc-dominance" class="stat-value">0%</p>
+                                </div>
+                            </div>
+
+                            <div class="stat-card">
+                                <div class="stat-icon">🔥</div>
+                                <div class="stat-info">
+                                    <p class="stat-label">Criptos Activas</p>
+                                    <p id="active-cryptos" class="stat-value">0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Top Cryptocurrencies -->
+                        <div class="crypto-list-container">
+                            <h3 class="subsection-title">Top Criptomonedas</h3>
+                            <div id="crypto-list" class="crypto-list">
+                                <!-- Crypto cards will be dynamically inserted here -->
+                                <div class="loading-spinner">
+                                    <div class="spinner"></div>
+                                    <p>Cargando precios en tiempo real...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Price Chart -->
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h3 class="subsection-title">Gráfico de Precios</h3>
+                                <div class="chart-controls">
+                                    <select id="chart-crypto-select" class="chart-select">
+                                        <option value="bitcoin">Bitcoin</option>
+                                        <option value="ethereum">Ethereum</option>
+                                        <option value="cardano">Cardano</option>
+                                        <option value="solana">Solana</option>
+                                    </select>
+                                    <div class="timeframe-btns">
+                                        <button class="timeframe-btn active" data-days="7">7D</button>
+                                        <button class="timeframe-btn" data-days="30">30D</button>
+                                        <button class="timeframe-btn" data-days="90">90D</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <canvas id="price-chart"></canvas>
+                        </div>
+                    </section>
+
+                    <!-- Exchange Section -->
+                    <section id="exchange-section" class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Exchange - Compra y Venta</h2>
+                            <div class="balance-display">
+                                <span class="balance-label">Balance:</span>
+                                <span id="user-balance" class="balance-value">$10,000.00</span>
+                            </div>
+                        </div>
+
+                        <div class="exchange-container">
+                            <!-- Buy Form -->
+                            <div class="exchange-card">
+                                <div class="exchange-header buy-header">
+                                    <h3>Comprar Criptomoneda</h3>
+                                    <span class="exchange-icon">📈</span>
+                                </div>
+
+                                <div class="exchange-form">
+                                    <div class="form-group">
+                                        <label for="buy-crypto-select" class="form-label">Seleccionar Cripto</label>
+                                        <select id="buy-crypto-select" class="form-select">
+                                            <option value="">Cargando...</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="buy-amount" class="form-label">Cantidad (USD)</label>
+                                        <input type="number" id="buy-amount" class="form-input" placeholder="0.00"
+                                            min="0" step="0.01">
+                                        <div class="input-hint">
+                                            <span id="buy-crypto-amount">0</span> <span id="buy-crypto-symbol"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="price-display">
+                                        <span class="price-label">Precio actual:</span>
+                                        <span id="buy-current-price" class="price-value">$0</span>
+                                    </div>
+
+                                    <button id="buy-btn" class="btn-buy">
+                                        Comprar Ahora
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Sell Form -->
+                            <div class="exchange-card">
+                                <div class="exchange-header sell-header">
+                                    <h3>Vender Criptomoneda</h3>
+                                    <span class="exchange-icon">📉</span>
+                                </div>
+
+                                <div class="exchange-form">
+                                    <div class="form-group">
+                                        <label for="sell-crypto-select" class="form-label">Seleccionar Cripto</label>
+                                        <select id="sell-crypto-select" class="form-select">
+                                            <option value="">No tienes criptomonedas</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Sell Mode Selector -->
+                                    <div class="form-group">
+                                        <label class="form-label">Modo de Venta</label>
+                                        <div class="sell-mode-selector">
+                                            <label class="mode-option">
+                                                <input type="radio" name="sell-mode" value="all" checked>
+                                                <span class="mode-label">
+                                                    <span class="mode-icon">💯</span>
+                                                    <span class="mode-text">Vender Todo</span>
+                                                </span>
+                                            </label>
+                                            <label class="mode-option">
+                                                <input type="radio" name="sell-mode" value="partial">
+                                                <span class="mode-label">
+                                                    <span class="mode-icon">⚖️</span>
+                                                    <span class="mode-text">Vender Parcial</span>
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" id="partial-amount-group" style="display: none;">
+                                        <label for="sell-amount" class="form-label">Cantidad a Vender</label>
+                                        <input type="number" id="sell-amount" class="form-input" placeholder="0.00"
+                                            min="0" step="0.00000001">
+                                        <div class="input-hint">
+                                            Disponible: <span id="sell-available">0</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="price-display">
+                                        <span class="price-label">Valor total:</span>
+                                        <span id="sell-total-value" class="price-value">$0</span>
+                                    </div>
+
+                                    <button id="sell-btn" class="btn-sell">
+                                        Vender Ahora
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Trending & Recommendations -->
+                        <div class="exchange-insights">
+                            <!-- Trending Now -->
+                            <div class="trending-widget">
+                                <div class="widget-header">
+                                    <h3 class="widget-title">🔥 Tendencias</h3>
+                                    <span class="widget-badge">En Vivo</span>
+                                </div>
+                                <div id="trending-list" class="trending-list">
+                                    <!-- Dynamic trending items -->
+                                </div>
+                            </div>
+
+                            <!-- Smart Recommendations -->
+                            <div class="recommendations-widget">
+                                <div class="widget-header">
+                                    <h3 class="widget-title">💡 Recomendaciones</h3>
+                                    <span class="widget-badge ai-badge">AI</span>
+                                </div>
+                                <div id="recommendations-list" class="recommendations-list">
+                                    <div class="recommendation-card">
+                                        <div class="rec-icon">📈</div>
+                                        <div class="rec-content">
+                                            <p class="rec-title">Analiza antes de invertir</p>
+                                            <p class="rec-desc">Consulta gráficos históricos</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quick Actions -->
+                            <div class="quick-actions-widget">
+                                <h3 class="widget-title">⚡ Acciones Rápidas</h3>
+                                <div class="quick-actions-grid">
+                                    <button class="quick-action-btn" data-amount="100">
+                                        <span class="qa-amount">$100</span>
+                                        <span class="qa-label">Rápido</span>
+                                    </button>
+                                    <button class="quick-action-btn" data-amount="500">
+                                        <span class="qa-amount">$500</span>
+                                        <span class="qa-label">Medio</span>
+                                    </button>
+                                    <button class="quick-action-btn" data-amount="1000">
+                                        <span class="qa-amount">$1K</span>
+                                        <span class="qa-label">Alto</span>
+                                    </button>
+                                    <button class="quick-action-btn" data-amount="all">
+                                        <span class="qa-amount">MAX</span>
+                                        <span class="qa-label">Todo</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Transaction History -->
+                        <div class="transaction-history">
+                            <h3 class="subsection-title">Historial de Transacciones</h3>
+                            <div id="transaction-list" class="transaction-list">
+                                <p class="empty-state">No hay transacciones aún</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Portfolio Section -->
+                    <section id="portfolio-section" class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Mi Portfolio</h2>
+                            <div class="portfolio-value">
+                                <span class="portfolio-live-indicator">● EN VIVO</span>
+                                <span class="portfolio-label">Valor Total:</span>
+                                <span id="portfolio-total-value" class="portfolio-total">$0.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio Stats -->
+                        <div class="portfolio-stats">
+                            <div class="portfolio-stat-card">
+                                <p class="portfolio-stat-label">Invertido</p>
+                                <p id="portfolio-invested" class="portfolio-stat-value">$0.00</p>
+                            </div>
+                            <div class="portfolio-stat-card">
+                                <p class="portfolio-stat-label">Ganancia/Pérdida</p>
+                                <p id="portfolio-profit" class="portfolio-stat-value">$0.00</p>
+                            </div>
+                            <div class="portfolio-stat-card">
+                                <p class="portfolio-stat-label">ROI</p>
+                                <p id="portfolio-roi" class="portfolio-stat-value">0%</p>
+                            </div>
+                        </div>
+
+                        <!-- Performance vs Market -->
+                        <div class="performance-comparator">
+                            <h3 class="subsection-title">📊 Performance vs Mercado</h3>
+                            <div class="performance-grid">
+                                <div class="performance-card">
+                                    <div class="perf-label">Tu Portfolio</div>
+                                    <div id="portfolio-performance" class="perf-value">+0%</div>
+                                    <div class="perf-chart-mini">
+                                        <canvas id="portfolio-mini-chart"></canvas>
+                                    </div>
+                                </div>
+                                <div class="performance-card">
+                                    <div class="perf-label">Mercado General</div>
+                                    <div id="market-performance" class="perf-value">+0%</div>
+                                    <div class="perf-chart-mini">
+                                        <canvas id="market-mini-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Best & Worst Performers -->
+                        <div class="performers-section">
+                            <div class="performers-card best-performers">
+                                <h4 class="performers-title">
+                                    <span class="performers-icon">🚀</span>
+                                    Top Performers
+                                </h4>
+                                <div id="best-performers" class="performers-list">
+                                    <p class="empty-state-small">Sin datos aún</p>
+                                </div>
+                            </div>
+                            <div class="performers-card worst-performers">
+                                <h4 class="performers-title">
+                                    <span class="performers-icon">📉</span>
+                                    Peor Performers
+                                </h4>
+                                <div id="worst-performers" class="performers-list">
+                                    <p class="empty-state-small">Sin datos aún</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Portfolio Chart -->
+                        <div class="portfolio-chart-container">
+                            <h3 class="subsection-title">Distribución de Assets</h3>
+                            <canvas id="portfolio-chart"></canvas>
+                        </div>
+
+                        <!-- Holdings List -->
+                        <div class="holdings-container">
+                            <h3 class="subsection-title">Mis Criptomonedas</h3>
+                            <div id="holdings-list" class="holdings-list">
+                                <p class="empty-state">Tu portfolio está vacío. ¡Empieza a invertir!</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Simulator Section -->
+                    <section id="simulator-section" class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Simulador de Inversiones</h2>
+                            <p class="section-description">Descubre cuánto habrías ganado si hubieras invertido en el
+                                pasado</p>
+                        </div>
+
+                        <div class="simulator-container">
+                            <div class="simulator-form-card">
+                                <h3>Configurar Simulación</h3>
+
+                                <div class="form-group">
+                                    <label for="sim-crypto-select" class="form-label">Criptomoneda</label>
+                                    <select id="sim-crypto-select" class="form-select">
+                                        <option value="bitcoin">Bitcoin (BTC)</option>
+                                        <option value="ethereum">Ethereum (ETH)</option>
+                                        <option value="cardano">Cardano (ADA)</option>
+                                        <option value="solana">Solana (SOL)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sim-amount" class="form-label">Monto de Inversión (USD)</label>
+                                    <input type="number" id="sim-amount" class="form-input" placeholder="1000" min="1"
+                                        value="1000">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="sim-timeframe" class="form-label">Período de Tiempo</label>
+                                    <select id="sim-timeframe" class="form-select">
+                                        <option value="7">Última semana</option>
+                                        <option value="30">Último mes</option>
+                                        <option value="90">Últimos 3 meses</option>
+                                        <option value="180">Últimos 6 meses</option>
+                                        <option value="365">Último año</option>
+                                    </select>
+                                </div>
+
+                                <button id="run-simulation-btn" class="btn-primary">
+                                    Ejecutar Simulación
+                                </button>
+                            </div>
+
+                            <div id="simulation-results" class="simulation-results hidden">
+                                <h3>Resultados de la Simulación</h3>
+
+                                <div class="result-stats">
+                                    <div class="result-stat">
+                                        <p class="result-label">Inversión Inicial</p>
+                                        <p id="sim-initial" class="result-value">$0</p>
+                                    </div>
+                                    <div class="result-stat">
+                                        <p class="result-label">Valor Actual</p>
+                                        <p id="sim-current" class="result-value">$0</p>
+                                    </div>
+                                    <div class="result-stat highlight">
+                                        <p class="result-label">Ganancia/Pérdida</p>
+                                        <p id="sim-profit" class="result-value">$0</p>
+                                    </div>
+                                    <div class="result-stat highlight">
+                                        <p class="result-label">ROI</p>
+                                        <p id="sim-roi" class="result-value">0%</p>
+                                    </div>
+                                </div>
+
+                                <div class="result-chart-container">
+                                    <canvas id="simulation-chart"></canvas>
+                                </div>
+
+                                <div id="sim-recommendation" class="recommendation-box">
+                                    <!-- Recommendation will be inserted here -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- News Section -->
+                    <section id="news-section" class="section">
+                        <div class="section-header">
+                            <h2 class="section-title">Noticias del Mercado</h2>
+                            <p class="section-description">Últimas actualizaciones y análisis en tiempo real</p>
+                        </div>
+                        <div class="news-container" id="news-container">
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                                <p>Cargando noticias...</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Admin Section -->
+                    <section id="admin-section" class="section">
+                        <div class="section-header">
+                            <h2 class="section-title" style="color: var(--warning);">Panel de Control (Admin)</h2>
+                            <p class="section-description">Gestión de usuarios y sistema</p>
+                        </div>
+
+                        <div class="admin-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                            <div class="admin-card"
+                                style="background: rgba(30, 41, 59, 0.5); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                                <h3 style="margin-bottom: 1rem;">Lista de Usuarios</h3>
+                                <div id="admin-users-list" style="max-height: 400px; overflow-y: auto;">
+                                    <p class="empty-state">Cargando usuarios...</p>
+                                </div>
+                            </div>
+
+                            <div class="admin-card"
+                                style="background: rgba(30, 41, 59, 0.5); padding: 1.5rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);">
+                                <h3 style="margin-bottom: 1rem;">God Mode (Añadir Fondos)</h3>
+                                <div class="form-group">
+                                    <label class="form-label">Seleccionar Usuario</label>
+                                    <select id="admin-fund-user" class="form-select">
+                                        <option value="">Selecciona un usuario...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Cantidad (USD)</label>
+                                    <input type="number" id="admin-fund-amount" class="form-input" placeholder="10000">
+                                </div>
+                                <button id="admin-fund-btn" class="btn-primary btn-full"
+                                    style="background: var(--warning); color: #000;">Inyectar Capital</button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer id="main-footer" class="footer">
+                <div class="container">
+                    <div class="footer-content">
+                        <p class="footer-text">© 2026 CriptoLive. Plataforma educativa de criptomonedas.</p>
+                        <p class="footer-disclaimer">Los datos mostrados son solo para fines informativos. No
+                            constituyen
+                            asesoramiento financiero.</p>
+                    </div>
+                </div>
+            </footer>
+
+            <!-- Toast Notifications -->
+            <div id="toast-container" class="toast-container"></div>
+
+            <!-- Modal -->
+            <div id="modal-overlay" class="modal-overlay hidden">
+                <div class="modal">
+                    <button id="modal-close" class="modal-close">&times;</button>
+                    <div id="modal-content" class="modal-content"></div>
+                </div>
+            </div>
+        </div><!-- .app-main -->
+    </div><!-- .app-layout -->
+
+    <!-- Mode Selection Screen -->
+    <div id="mode-selection-screen" class="mode-selection-screen hidden">
+        <div class="selection-container">
+            <h2 class="selection-title">Selecciona tu Mercado</h2>
+            <div class="selection-cards">
+                <div class="selection-card" id="select-crypto-mode">
+                    <div class="card-icon">₿</div>
+                    <h3>Criptomonedas</h3>
+                    <p>Bitcoin, Ethereum, Solana y más.</p>
+                </div>
+                <div class="selection-card" id="select-stocks-mode">
+                    <div class="card-icon">📈</div>
+                    <h3>Materias Primas y Acciones</h3>
+                    <p>Oro, Petróleo, Apple, Tesla...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stocks/Commodities App Container -->
+    <div id="stocks-app-container" class="app-layout hidden">
+        <!-- Sidebar (Stocks) -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">₿</div>
+                <h1 class="logo-text">CriptoLive</h1>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button id="stocks-nav-dashboard" class="nav-btn active"
+                    onclick="if(window.stocksNavigation) window.stocksNavigation.navigateTo('stocks-dashboard'); else console.error('stocksNavigation not found');">
+                    <span class="nav-icon">📊</span>
+                    <span>Mercado</span>
+                </button>
+                <button id="stocks-nav-exchange" class="nav-btn"
+                    onclick="if(window.stocksNavigation) window.stocksNavigation.navigateTo('stocks-exchange'); else console.error('stocksNavigation not found');">
+                    <span class="nav-icon">💱</span>
+                    <span>Operar</span>
+                </button>
+                <button id="stocks-nav-portfolio" class="nav-btn"
+                    onclick="if(window.stocksNavigation) window.stocksNavigation.navigateTo('stocks-portfolio'); else console.error('stocksNavigation not found');">
+                    <span class="nav-icon">💼</span>
+                    <span>Portafolio</span>
+                </button>
+                <button id="stocks-back-to-mode" class="nav-btn">
+                    <span class="nav-icon">⬅️</span>
+                    <span>Cambiar Modo</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="market-status">
+                    <span class="status-indicator pulse"></span>
+                    <span class="status-text">Mercado Activo</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content (Stocks) -->
+        <div class="app-main">
+            <header class="top-bar">
+                <div class="auth-section" style="margin-left: auto; display: flex; align-items: center; gap: 1rem;">
+                    <button id="stocks-login-btn" class="btn-primary">
+                        <span>🔐</span>
+                        Iniciar Sesión
+                    </button>
+                    <div id="stocks-user-profile" class="user-profile hidden">
+                        <img id="stocks-user-avatar" src="" alt="User" class="user-avatar">
+                        <span id="stocks-user-name" class="user-name"></span>
+                        <button id="stocks-logout-btn" class="logout-btn">Salir</button>
+                    </div>
+                </div>
+            </header>
+
+            <main id="stocks-content" class="main-content">
+                <!-- Stocks Dashboard -->
+                <div id="stocks-dashboard-view" class="view active" style="padding-top: 80px;">
+                    <div class="hero-section"
+                        style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 2rem 1rem; margin-bottom: 1rem; min-height: auto; display: flex; justify-content: center;">
+                        <div class="aesthetic-header-box"
+                            style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 2rem 3rem; text-align: center; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); max-width: 800px; width: 100%; position: relative; overflow: hidden;">
+                            <div
+                                style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 50% 50%, rgba(255,107,53,0.15) 0%, transparent 60%); z-index: 0; pointer-events: none;">
+                            </div>
+                            <h1
+                                style="margin-bottom: 0.5rem; font-size: 2.5rem; font-weight: 800; background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; z-index: 1;">
+                                Mercado Global</h1>
+                            <p style="font-size: 1.1rem; color: #cbd5e1; position: relative; z-index: 1; margin: 0;">
+                                Acciones y Materias Primas en tiempo real</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <!-- Live Ticker/Grid of Assets -->
+                        <div id="stocks-list" class="market-sections">
+                            <p>Cargando activos...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stocks Portfolio -->
+                <div id="stocks-portfolio-view" class="view hidden" style="padding-top: 80px;">
+                    <div class="hero-section"
+                        style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 2rem 1rem; margin-bottom: 1rem; min-height: auto; display: flex; justify-content: center;">
+                        <div class="aesthetic-header-box"
+                            style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 2rem 3rem; text-align: center; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); max-width: 800px; width: 100%; position: relative; overflow: hidden;">
+                            <div
+                                style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 50% 50%, rgba(0,212,255,0.15) 0%, transparent 60%); z-index: 0; pointer-events: none;">
+                            </div>
+                            <h1
+                                style="margin-bottom: 0.5rem; font-size: 2.5rem; font-weight: 800; background: var(--gradient-success); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; z-index: 1;">
+                                Mi Portafolio</h1>
+                            <p style="font-size: 1.1rem; color: #cbd5e1; position: relative; z-index: 1; margin: 0;">
+                                Resumen de tus inversiones en acciones y materias primas</p>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Stats -->
+                    <div class="stats-grid" style="margin-bottom: 2rem;">
+                        <div class="stat-card">
+                            <div class="stat-label">Balance Total</div>
+                            <div class="stat-value" id="stocks-total-balance">$10,000.00</div>
+                            <div class="stat-change positive">↑ 0%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Valor Invertido</div>
+                            <div class="stat-value" id="stocks-invested-total">$0.00</div>
+                            <div class="stat-change">0 activos</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Ganancia/Pérdida</div>
+                            <div class="stat-value" id="stocks-profit-loss">$0.00</div>
+                            <div class="stat-change neutral" id="stocks-profit-percent">0%</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-label">Disponible</div>
+                            <div class="stat-value" id="stocks-available-balance">$10,000.00</div>
+                            <div class="stat-change">Para invertir</div>
+                        </div>
+                    </div>
+
+                    <!-- Performance vs Market (Stocks) -->
+                    <div class="performance-comparator" style="margin-bottom: 2rem;">
+                        <h3 class="subsection-title">📊 Performance vs Mercado Global</h3>
+                        <div class="performance-grid">
+                            <div class="performance-card">
+                                <div class="perf-label">Tu Portafolio</div>
+                                <div id="stocks-portfolio-performance" class="perf-value">+0%</div>
+                                <div class="perf-chart-mini">
+                                    <canvas id="stocks-portfolio-mini-chart"></canvas>
+                                </div>
+                            </div>
+                            <div class="performance-card">
+                                <div class="perf-label">S&P 500 (Referencia)</div>
+                                <div id="stocks-market-performance" class="perf-value">+1.2%</div>
+                                <div class="perf-chart-mini">
+                                    <canvas id="stocks-market-mini-chart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Chart (Stocks) -->
+                    <div class="portfolio-chart-container" style="margin-bottom: 2rem;">
+                        <h3 class="subsection-title">Distribución de Activos</h3>
+                        <canvas id="stocks-portfolio-chart"></canvas>
+                    </div>
+
+                    <!-- Holdings Section -->
+                    <div style="margin-bottom: 2rem;">
+                        <h3 class="subsection-title" style="margin-bottom: 1rem;">Mis Activos</h3>
+                        <div id="stocks-holdings-list">
+                            <p class="empty-state">No tienes inversiones en acciones o materias primas</p>
+                        </div>
+                    </div>
+
+                    <!-- Transaction History (Stocks) -->
+                    <div class="transaction-history" style="margin-bottom: 2rem;">
+                        <h3 class="subsection-title">Historial de Transacciones</h3>
+                        <div id="stocks-transaction-list" class="transaction-list">
+                            <p class="empty-state">No hay transacciones aún</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stocks Exchange (Operar) -->
+                <div id="stocks-exchange-view" class="view hidden">
+                    <div class="hero-section"
+                        style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); padding: 2rem 1rem; margin-bottom: 1rem; min-height: auto; display: flex; justify-content: center;">
+                        <div class="aesthetic-header-box"
+                            style="background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 2rem 3rem; text-align: center; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.1); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); max-width: 800px; width: 100%; position: relative; overflow: hidden;">
+                            <div
+                                style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle at 50% 50%, rgba(255,20,147,0.15) 0%, transparent 60%); z-index: 0; pointer-events: none;">
+                            </div>
+                            <h1
+                                style="margin-bottom: 0.5rem; font-size: 2.5rem; font-weight: 800; background: var(--gradient-secondary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; position: relative; z-index: 1;">
+                                Centro de Operaciones</h1>
+                            <p style="font-size: 1.1rem; color: #cbd5e1; position: relative; z-index: 1; margin: 0;">
+                                Compra y vende acciones y materias primas al instante</p>
+                        </div>
+                    </div>
+
+                    <div class="exchange-container">
+                        <!-- Buy Form -->
+                        <div class="exchange-card">
+                            <div class="exchange-header buy-header">
+                                <h3>Comprar Activo</h3>
+                                <span class="exchange-icon">📈</span>
+                            </div>
+
+                            <div class="exchange-form">
+                                <div class="form-group">
+                                    <label for="stocks-buy-select" class="form-label">Seleccionar Activo</label>
+                                    <select id="stocks-buy-select" class="form-select">
+                                        <option value="">Cargando...</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="stocks-buy-amount" class="form-label">Cantidad a Invertir (USD)</label>
+                                    <input type="number" id="stocks-buy-amount" class="form-input" placeholder="0.00"
+                                        min="0" step="0.01">
+                                    <div class="input-hint">
+                                        <span id="stocks-buy-asset-amount">0</span> <span
+                                            id="stocks-buy-asset-symbol"></span>
+                                    </div>
+                                </div>
+
+                                <div class="price-display">
+                                    <span class="price-label">Precio actual:</span>
+                                    <span id="stocks-buy-current-price" class="price-value">$0</span>
+                                </div>
+
+                                <div class="price-display" style="margin-top: -1rem; margin-bottom: 1.5rem;">
+                                    <span class="price-label">Balance Disponible:</span>
+                                    <span id="stocks-buy-available-balance" class="price-value"
+                                        style="font-size: 1rem; color: #94a3b8;">$0.00</span>
+                                </div>
+
+                                <button id="stocks-buy-btn" class="btn-buy">
+                                    Comprar Ahora
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Sell Form -->
+                        <div class="exchange-card">
+                            <div class="exchange-header sell-header">
+                                <h3>Vender Activo</h3>
+                                <span class="exchange-icon">📉</span>
+                            </div>
+
+                            <div class="exchange-form">
+                                <div class="form-group">
+                                    <label for="stocks-sell-select" class="form-label">Mis Activos</label>
+                                    <select id="stocks-sell-select" class="form-select">
+                                        <option value="">No tienes activos</option>
+                                    </select>
+                                </div>
+
+                                <!-- Sell Mode Selector -->
+                                <div class="form-group">
+                                    <label class="form-label">Modo de Venta</label>
+                                    <div class="sell-mode-selector">
+                                        <label class="mode-option">
+                                            <input type="radio" name="stocks-sell-mode" value="all" checked>
+                                            <span class="mode-label">
+                                                <span class="mode-icon">💯</span>
+                                                <span class="mode-text">Vender Todo</span>
+                                            </span>
+                                        </label>
+                                        <label class="mode-option">
+                                            <input type="radio" name="stocks-sell-mode" value="partial">
+                                            <span class="mode-label">
+                                                <span class="mode-icon">⚖️</span>
+                                                <span class="mode-text">Vender Parcial</span>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group" id="stocks-partial-amount-group" style="display: none;">
+                                    <label for="stocks-sell-amount" class="form-label">Cantidad a Vender</label>
+                                    <input type="number" id="stocks-sell-amount" class="form-input" placeholder="0.00"
+                                        min="0" step="0.01">
+                                    <div class="input-hint">
+                                        Disponible: <span id="stocks-sell-available">0</span>
+                                    </div>
+                                </div>
+
+                                <div class="price-display">
+                                    <span class="price-label">Valor a recibir:</span>
+                                    <span id="stocks-sell-total-value" class="price-value">$0</span>
+                                </div>
+
+                                <button id="stocks-sell-btn" class="btn-sell">
+                                    Vender Ahora
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Auth Overlay -->
+    <div id="auth-overlay" class="auth-overlay">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="auth-logo">₿</div>
+                <h2>Bienvenido a CriptoLive</h2>
+                <p>Tu puerta al mundo crypto</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="login-form-container" class="auth-form-container">
+                <h3>Iniciar Sesión</h3>
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" class="form-input" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Contraseña</label>
+                        <input type="password" id="login-password" class="form-input" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Entrar</button>
+                </form>
+                <div style="margin-top: 1rem; text-align: center;">
+                    <button id="guest-login-btn" class="btn-secondary btn-full"
+                        style="background: transparent; border: 1px solid rgba(255,255,255,0.2);">Continuar como
+                        Invitado</button>
+                </div>
+                <p class="auth-switch">
+                    ¿No tienes cuenta? <a href="#" id="switch-to-register">Regístrate gratis</a>
+                </p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form-container" class="auth-form-container hidden">
+                <h3>Crear Cuenta</h3>
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="reg-name">Nombre Completo</label>
+                        <input type="text" id="reg-name" class="form-input" placeholder="Juan Pérez" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" class="form-input" placeholder="tu@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Contraseña</label>
+                        <input type="password" id="reg-password" class="form-input" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Registrarse</button>
+                </form>
+                <p class="auth-switch">
+                    ¿Ya tienes cuenta? <a href="#" id="switch-to-login">Inicia sesión</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="stocks-commodities.js?v=20"></script>
+    <script src="app.js?v=20"></script>
+</body>
+
+</html>

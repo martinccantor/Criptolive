@@ -1,0 +1,66 @@
+/* === Real-time Portfolio Updates === */
+.value-updated {
+    animation: pulseGlow 1s ease-out;
+}
+
+@keyframes pulseGlow {
+    0% {
+        transform: scale(1);
+        color: var(--text-primary);
+    }
+
+    50% {
+        transform: scale(1.05);
+        color: var(--success);
+        text-shadow: 0 0 20px rgba(0, 230, 118, 0.6);
+    }
+
+    100% {
+        transform: scale(1);
+        color: var(--text-primary);
+    }
+}
+
+/* Smooth transitions for portfolio values */
+.portfolio-total,
+.portfolio-stat-value,
+.holding-current-value {
+    transition: all 0.3s ease;
+}
+
+/* Live indicator for portfolio */
+.portfolio-live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    background: rgba(0, 230, 118, 0.1);
+    border: 1px solid var(--success);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-xs);
+    color: var(--success);
+    font-weight: 600;
+}
+
+.portfolio-live-indicator::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    animation: livePulse 2s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(0, 230, 118, 0.7);
+    }
+
+    50% {
+        opacity: 0.7;
+        box-shadow: 0 0 0 6px rgba(0, 230, 118, 0);
+    }
+}

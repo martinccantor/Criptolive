@@ -1,0 +1,24 @@
+{
+    "name": "criptolive",
+    "version": "1.0.0",
+    "description": "Plataforma moderna de trading de criptomonedas en tiempo real",
+    "main": "index.html",
+    "scripts": {
+        "start": "python -m http.server 8000",
+        "dev": "python -m http.server 8000"
+    },
+    "keywords": [
+        "cryptocurrency",
+        "bitcoin",
+        "ethereum",
+        "trading",
+        "exchange",
+        "portfolio",
+        "crypto"
+    ],
+    "author": "CriptoLive",
+    "license": "MIT",
+    "dependencies": {
+        "chart.js": "^4.4.0"
+    }
+}
